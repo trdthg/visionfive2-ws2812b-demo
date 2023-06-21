@@ -1,6 +1,6 @@
 # 昉・星光开发板炫彩灯环控制
 
-这个 Demo 我个人在 VisionFive 1 上测试失败了
+这个 Demo 我个人在 VisionFive 1 上测试失败了，另外 `backend` 目录内的版本需要配合 [frontend 工程](https://github.com/misaka00251/visionfive2-ws2812b-demo-frontend)。
 
 ---
 
