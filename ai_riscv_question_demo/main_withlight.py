@@ -100,12 +100,12 @@ if __name__ == "__main__":
         global t1
         global check_exit
         check_exit = True
-        t1.join(timeout=3)
-        t2.join(timeout=3)
-        sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
 
     t1.start()
     t2.start()
+
+    t1.join(timeout=3)
+    t2.join(timeout=3)
