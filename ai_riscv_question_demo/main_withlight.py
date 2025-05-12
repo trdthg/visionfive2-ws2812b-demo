@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import signal
+import sys
 import threading
 import question_lib
 import time
@@ -101,7 +102,7 @@ if __name__ == "__main__":
         check_exit = True
         t1.join(timeout=3)
         t2.join(timeout=3)
-        exit(0)
+        sys.exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
