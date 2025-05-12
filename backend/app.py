@@ -2,16 +2,21 @@ from flask import Flask, jsonify, request, make_response, g
 from flask_cors import CORS
 from lib import neopixel_spidev as np
 
+
 # Run something after app starts
 def deinit_light():
     np.NeoPixelSpiDev(bus, chipselect, LEDCount, pixel_order=np.GRB).deinit()
 
+
 class Flask(Flask):
-  def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
-    if not self.debug:
-        with self.app_context():
-            deinit_light()
-    super(Flask, self).run(host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options)
+    def run(self, host=None, port=None, debug=None, load_dotenv=True, **options):
+        if not self.debug:
+            with self.app_context():
+                deinit_light()
+        super(Flask, self).run(
+            host=host, port=port, debug=debug, load_dotenv=load_dotenv, **options
+        )
+
 
 app = Flask(__name__)
 CORS(app)
@@ -105,7 +110,7 @@ def set_light():
 @app.route("/setcolor", methods=["POST"])
 def set_color():
     value = request.args.get("value")
-    rgb = tuple(int(value[i:i+2], 16) for i in (0, 2, 4))
+    rgb = tuple(int(value[i : i + 2], 16) for i in (0, 2, 4))
     try:
         if len(rgb) != 3:
             raise ValueError
@@ -116,7 +121,13 @@ def set_color():
     light_color = rgb
     light_control(light_status, light_brightness, light_color)
     return make_response(
-        jsonify({"result": "success", "color": str(rgb[0]) + "," + str(rgb[1]) + "," + str(rgb[2])}), 200
+        jsonify(
+            {
+                "result": "success",
+                "color": str(rgb[0]) + "," + str(rgb[1]) + "," + str(rgb[2]),
+            }
+        ),
+        200,
     )
 
 
