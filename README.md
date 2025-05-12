@@ -1,6 +1,8 @@
 # 昉・星光开发板炫彩灯环控制
 
-这个 Demo 我个人在 VisionFive 1 上测试失败了，另外 `backend` 目录内的版本需要配合 [frontend 工程](https://github.com/misaka00251/visionfive2-ws2812b-demo-frontend)。
+~这个 Demo 我个人在 VisionFive 1 上测试失败了，另外 `backend` 目录内的版本需要配合 [frontend 工程](https://github.com/misaka00251/visionfive2-ws2812b-demo-frontend)。~
+
+只在 vf2 上测试过，前端仓库一并被复制到这里
 
 ---
 
@@ -14,13 +16,19 @@
 
 ## 前期准备
 
-安装必要的依赖:
+安装必要的依赖：
 
 ```bash
 sudo dnf install python python3-numpy python3-devel python3-tkinter
 ```
 
+> 注意这里的 numpy 使用 pip 无法安装，必须使用系统包管理器
+
 获取 `py-neopixel-spidev` 扩展库：
+
+`pip install --no-deps py-neopixel-spidev@git+https://github.com/fschrempf/py-neopixel-spidev.git`
+
+或者
 
 ```bash
 git clone https://github.com/fschrempf/py-neopixel-spidev.git
@@ -31,7 +39,7 @@ sudo python setup.py install
 
 ## 连接线路
 
-一头连接 IN 口，一头连接开发板。根据官方的文档:
+一头连接 IN 口，一头连接开发板。根据官方的文档：
 
 | Num | Label | Description         |
 | --- | ----- | ------------------- |
@@ -45,7 +53,7 @@ sudo python setup.py install
 
 ## 开始点灯
 
-在 `py-neopixel-spidev` 目录内运行:
+在 `py-neopixel-spidev` 目录内运行：
 
 ```bash
 sudo python3 ws2812b_gui.py
@@ -55,7 +63,7 @@ sudo python3 ws2812b_gui.py
 
 ### `self.spi.open(bus, dev)` 找不到设备
 
-请检查 SPI 设备:
+请检查 SPI 设备：
 
 ```bash
 ls -l /dev/spi* 
