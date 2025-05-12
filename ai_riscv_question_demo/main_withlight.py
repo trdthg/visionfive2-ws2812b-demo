@@ -13,13 +13,23 @@ state = question_lib.State.INIT
 question_info = {}
 acc = {}
 
-
 check_exit = False
+
+notice_flag = False
+
+
+def notice():
+    global notice_flag
+    if notice_flag:
+        notice_flag = False
+        return True
+    return False
 
 
 def ring_control():
     global pixels
     global state
+    global notice_flag
     count = 0
     while True:
         if check_exit:
@@ -29,7 +39,7 @@ def ring_control():
         if state == question_lib.State.INIT:
             ring.load(pixels)
         if state == question_lib.State.WAIT:
-            ring.heartbeat(pixels, "yellow")
+            ring.breath(pixels, notice(), "yellow")
         elif state == question_lib.State.YES:
             if acc["yes_acc"] >= 3:
                 ring.rainbow(pixels, count)
@@ -40,16 +50,22 @@ def ring_control():
         elif state == question_lib.State.END:
             ring.color(pixels, "white")
             pass
+        notice_flag = False
 
 
 def cb(new_question_info, new_state, new_acc):
     global pixels
+    # 状态改变
     global state
     state = new_state
     global question_info
     question_info = new_question_info
     global acc
     acc = new_acc
+
+    # 灯停止当前任务
+    global notice_flag
+    notice_flag = True
 
     if state == question_lib.State.INIT:
         print("出题中.....")

@@ -43,7 +43,7 @@ def rainbow(pixels, cycle):
     time.sleep(0.05 / SPEED)
 
 
-def load(pixels):
+def load(pixels, check_exit):
     print("=== 流星效果 ===")
     trail_length = random.randint(4, 8)
     for i in range(LED_COUNT + trail_length):
@@ -59,6 +59,8 @@ def load(pixels):
                     int(100 * brightness),
                     int(50 * brightness),
                 )
+            if check_exit():
+                return
         pixels.show()
         time.sleep(0.05 / SPEED)
 
@@ -76,6 +78,29 @@ def load2(pixels):
             time.sleep(0.05 / SPEED)
 
 
+def breath(pixels, exit_check, color="red", speed=1.0):
+    """呼吸灯效果"""
+    color = colors[color]
+    for brightness in range(0, 101, 5):
+        r = int(color[0] * brightness / 100)
+        g = int(color[1] * brightness / 100)
+        b = int(color[2] * brightness / 100)
+        pixels.fill((r, g, b))
+        pixels.show()
+        time.sleep(0.03 / speed)
+        if exit_check():
+            return
+    for brightness in range(100, -1, -5):
+        r = int(color[0] * brightness / 100)
+        g = int(color[1] * brightness / 100)
+        b = int(color[2] * brightness / 100)
+        pixels.fill((r, g, b))
+        pixels.show()
+        time.sleep(0.03 / speed)
+        if exit_check():
+            break
+
+
 def heartbeat(pixels, color="red"):
     print("=== 心跳效果 ===")
     # 心跳膨胀
@@ -83,8 +108,8 @@ def heartbeat(pixels, color="red"):
         pixels.fill(
             (
                 int(colors[color][0] * brightness),
-                colors[color][1] * brightness,
-                colors[color][2] * brightness,
+                int(colors[color][1] * brightness),
+                int(colors[color][2] * brightness),
             )
         )
         pixels.show()
