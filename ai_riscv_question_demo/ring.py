@@ -28,7 +28,7 @@ def clear(pixels):
 
 def color(pixels, check_exit, color):
     for i in range(LED_COUNT):
-        pixels.fill((colors[color], 0, 0))
+        pixels.fill(colors[color])
         if check_exit():
             return
 
