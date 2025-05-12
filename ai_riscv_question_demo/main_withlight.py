@@ -20,6 +20,9 @@ notice_flag = False
 
 
 def check_notice():
+    global check_exit
+    if check_exit:
+        return True
     global notice_flag
     if notice_flag:
         notice_flag = False
