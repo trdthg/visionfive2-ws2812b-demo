@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import signal
 import sys
 import threading
@@ -108,3 +109,4 @@ if __name__ == "__main__":
     t2.start()
 
     t1.join(timeout=3)
+    os._exit(0)
