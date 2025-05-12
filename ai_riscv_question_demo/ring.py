@@ -22,6 +22,10 @@ colors = {
 }
 
 
+def clear(pixels):
+    pixels.fill((0, 0, 0))  # 清空所有 LED
+
+
 def color(pixels, color):
     pixels.fill(colors[color])
     for i in range(0, 255, 2):

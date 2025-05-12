@@ -1,3 +1,4 @@
+import signal
 import threading
 import question_lib
 import time
@@ -13,11 +14,17 @@ question_info = {}
 acc = {}
 
 
+check_exit = False
+
+
 def ring_control():
     global pixels
     global state
     count = 0
     while True:
+        if check_exit:
+            ring.clear(pixels)
+            break
         count += 1
         if state == question_lib.State.INIT:
             ring.load(pixels)
@@ -63,7 +70,16 @@ def cb(new_question_info, new_state, new_acc):
         time.sleep(1)
 
 
-t1 = threading.Thread(target=ring_control, args=())
-t1.start()
+if __name__ == "__main__":
+    t1 = threading.Thread(target=ring_control, args=())
 
-question_lib.main_loop(cb=cb)
+    def signal_handler():
+        global t1
+        global check_exit
+        check_exit = True
+        t1.join()
+        exit(0)
+
+    t1.start()
+    signal.signal(signal.SIGINT, signal_handler)
+    question_lib.main_loop(cb=cb)
