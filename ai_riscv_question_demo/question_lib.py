@@ -168,13 +168,11 @@ def main_loop(cb=empty_cb, debug=False):
                 acc["yes_acc"] += 1
                 acc["no_acc"] = 0
                 cb(res, State.YES, acc)
-                acc["yes_acc"] = 0
             else:
                 acc["no_count"] += 1
                 acc["no_acc"] += 1
                 acc["yes_acc"] = 0
                 cb(res, State.NO, acc)
-                acc["no_acc"] = 0
 
             # 结束
             cb(res, State.END, acc)

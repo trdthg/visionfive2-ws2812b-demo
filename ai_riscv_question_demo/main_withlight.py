@@ -47,6 +47,7 @@ def ring_control():
         elif state == question_lib.State.YES:
             if acc["yes_acc"] >= 3:
                 ring.rainbow(pixels, check_notice, count)
+                acc["yes_acc"] = 0
             else:
                 ring.breath(pixels, check_notice, "green")
         elif state == question_lib.State.NO:
