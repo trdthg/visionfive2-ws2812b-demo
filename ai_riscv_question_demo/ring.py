@@ -34,7 +34,7 @@ def color(pixels, color):
 
 
 def rainbow(pixels, cycle, check_exit):
-    print("=== 彩虹波浪效果 ===")
+    # print("=== 彩虹波浪效果 ===")
     for i in range(LED_COUNT):
         # 计算每个 LED 的颜色偏移
         color_pos = int((i * 256 / LED_COUNT) + cycle * 10)
@@ -46,7 +46,7 @@ def rainbow(pixels, cycle, check_exit):
 
 
 def load(pixels, check_exit):
-    print("=== 流星效果 ===")
+    # print("=== 流星效果 ===")
     trail_length = random.randint(4, 8)
     for i in range(LED_COUNT + trail_length):
         pixels.fill((0, 0, 0))  # 清空所有 LED
@@ -68,7 +68,7 @@ def load(pixels, check_exit):
 
 
 def load2(pixels):
-    print("=== 色彩追逐效果 ===")
+    # print("=== 色彩追逐效果 ===")
     for color in [(255, 0, 0), (0, 255, 0), (0, 0, 255), (255, 255, 0)]:
         for i in range(LED_COUNT * 2):
             pixels.fill((0, 0, 0))
@@ -104,7 +104,7 @@ def breath(pixels, exit_check, color="red", speed=1.0):
 
 
 def heartbeat(pixels, check_exit, color="red"):
-    print("=== 心跳效果 ===")
+    # print("=== 心跳效果 ===")
     # 心跳膨胀
     for brightness in [x * 0.01 for x in range(20, 100, 5)]:
         pixels.fill(
@@ -128,7 +128,7 @@ def heartbeat(pixels, check_exit, color="red"):
 
 
 def boom(pixels):
-    print("=== 爆炸效果 ===")
+    # print("=== 爆炸效果 ===")
     for center in [LED_COUNT // 4, LED_COUNT // 2, 3 * LED_COUNT // 4]:
         for radius in range(1, LED_COUNT // 2 + 1):
             pixels.fill((0, 0, 0))
