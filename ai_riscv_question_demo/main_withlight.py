@@ -108,5 +108,5 @@ if __name__ == "__main__":
     t1.start()
     t2.start()
 
-    t1.join(timeout=3)
+    t1.join()
     os._exit(0)
