@@ -26,9 +26,16 @@ def clear(pixels):
     pixels.fill((0, 0, 0))  # 清空所有 LED
 
 
-def color(pixels, check_exit, color):
+def color(pixels, check_exit, color, brightness=1):
+    color = colors[color]
     for i in range(LED_COUNT):
-        pixels.fill(colors[color])
+        pixels.fill(
+            (
+                int(color[0] * brightness),
+                int(color[1] * brightness),
+                int(color[2] * brightness),
+            )
+        )
         if check_exit():
             return
 

@@ -52,7 +52,7 @@ def ring_control():
         elif state == question_lib.State.NO:
             ring.color(pixels, check_notice, "red")
         elif state == question_lib.State.END:
-            ring.color(pixels, check_notice, "white")
+            ring.color(pixels, check_notice, "white", 0.6)
         notice_flag = False
 
 
