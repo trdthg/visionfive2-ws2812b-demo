@@ -141,7 +141,7 @@ class State(Enum):
     END = 4
 
 
-def main_loop(cb=empty_cb, debug=False):
+def main_loop(cb=empty_cb, debug=False, check_exit=None):
     acc = {
         "excpt_count": 0,
         "excpt_acc_count": 0,
@@ -151,7 +151,7 @@ def main_loop(cb=empty_cb, debug=False):
         "no_acc": 0,
     }
     while True:
-        if acc["excpt_acc_count"] > 10:
+        if (check_exit and check_exit()) or acc["excpt_acc_count"] > 10:
             break
         try:
             # 出题前

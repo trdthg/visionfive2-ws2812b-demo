@@ -47,7 +47,6 @@ def ring_control():
         elif state == question_lib.State.YES:
             if acc["yes_acc"] >= 3:
                 ring.rainbow(pixels, check_notice, count)
-                acc["yes_acc"] = 0
             else:
                 ring.breath(pixels, check_notice, "green")
         elif state == question_lib.State.NO:
@@ -79,27 +78,33 @@ def cb(new_question_info, new_state, new_acc):
             print(option)
     elif state == question_lib.State.YES:
         print("结果：正确")
-        time.sleep(1)
+        input("按回车继续")
         if acc["yes_acc"] >= 3:
-            input("按回车继续")
+            acc["yes_acc"] = 0
     elif state == question_lib.State.NO:
         print("结果：错误")
-        time.sleep(1)
+        input("按回车继续")
     elif state == question_lib.State.END:
         print("答案分析：" + question_info["more"])
-        input("按回车继续")
+        input("按回车查看答案解析")
 
 
 if __name__ == "__main__":
     t1 = threading.Thread(target=ring_control, args=())
+    t2 = threading.Thread(
+        target=question_lib.main_loop, kwargs={"cb": cb, "check_exit": check_notice}
+    )
 
     def signal_handler():
         global t1
         global check_exit
         check_exit = True
         t1.join()
+        t2.join()
         exit(0)
 
-    t1.start()
     signal.signal(signal.SIGINT, signal_handler)
-    question_lib.main_loop(cb=cb)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    t1.start()
+    t2.start()
