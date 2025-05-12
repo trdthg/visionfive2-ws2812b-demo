@@ -1,0 +1,44 @@
+@import 'variables';
+
+.big-footer-block {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer a:hover {
+    text-decoration: none;
+}
+
+.footer-under {
+    background-color: $footer-color;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+}
+
+.footer-flex {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.margin-left {
+    float: left;
+    margin-left: 24px;
+}
+ 
+.margin-right {
+    float: right;
+    margin-right: 24px;
+}
+
+.footer-list {
+    margin: 0;
+}
+
+.footer-list li {
+    display: inline-block;
+    padding: 0 24px 0 0;
+}

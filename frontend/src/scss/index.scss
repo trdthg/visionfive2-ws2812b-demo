@@ -1,0 +1,14 @@
+@import 'custom';
+@import '~bootstrap/scss/bootstrap';
+
+.top-padding {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+nav {
+    box-shadow: 0 20px 10px 0 rgba(0, 0, 0, .15);
+    background-color: #fff;
+    z-index: 2;
+}
+

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <module href="/components/head.html"></module>
+    <title>WS2812B Demo</title>
+</head>
+
+<body>
+    <module href="/components/navbar.html"></module>
+
+    <div class="container my-5">
+        <div class="p-5 text-center bg-body-tertiary rounded-3">
+            <h1 class="text-body-emphasis">WS2812B Lightning Control</h1>
+            <p class="lead">
+                This allows you to control your light via
+                <code>RESTful API</code>
+                &
+                <code>WebSocket</code>.
+            </p>
+        </div>
+    </div>
+
+    <div class="px-4 pt-1 my-1 text-center">
+        <div class="d-flex justify-content-center">
+            <div class="d-flex align-items-center">
+                <p class="lead me-2 mb-0">Lightstatus:</p>
+                <span class="badge rounded-pill bg-secondary">Unknown</span>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center my-2">
+            <div class="d-flex justify-content-center align-tiems-center flex-column">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" id="lightswitch" />
+                    <label class="form-check-label" for="lightswitch">Turn on the light</label>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+                <div class="d-flex align-items-center">
+                    <label for="lightcolor" class="form-label me-2 mb-0">Change color</label>
+                    <input type="color" class="form-control form-control-color" id="lightcolor" value="#006eff"
+                        title="Choose your color">
+                </div>
+                <button type="button" class="btn btn-primary mx-auto my-2" id="sendcolor">Change it!</button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center flex-column">
+            <label for="lightbrightness" class="form-label">Change brightness</label>
+            <input type="range" class="form-range w-50" min="0" max="1" step="0.01" id="lightbrightness">
+        </div>
+    </div>
+
+    <script src="./bundle.js"></script>
+    <module href="/components/footer.html"></module>
+    <module href="/components/toast.html"></module>
+</body>
+
+</html>
