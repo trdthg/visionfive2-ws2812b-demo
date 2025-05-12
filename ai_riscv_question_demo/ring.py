@@ -33,12 +33,14 @@ def color(pixels, color):
         pixels.fill((i, 0, 0))
 
 
-def rainbow(pixels, cycle):
+def rainbow(pixels, cycle, check_exit):
     print("=== 彩虹波浪效果 ===")
     for i in range(LED_COUNT):
         # 计算每个 LED 的颜色偏移
         color_pos = int((i * 256 / LED_COUNT) + cycle * 10)
         pixels[i] = wheel(color_pos & 255)
+        if check_exit():
+            return
     pixels.show()
     time.sleep(0.05 / SPEED)
 
@@ -101,7 +103,7 @@ def breath(pixels, exit_check, color="red", speed=1.0):
             break
 
 
-def heartbeat(pixels, color="red"):
+def heartbeat(pixels, check_exit, color="red"):
     print("=== 心跳效果 ===")
     # 心跳膨胀
     for brightness in [x * 0.01 for x in range(20, 100, 5)]:
@@ -114,11 +116,15 @@ def heartbeat(pixels, color="red"):
         )
         pixels.show()
         time.sleep(0.01 / SPEED)
+        if check_exit():
+            return
     # 心跳收缩
     for brightness in [x * 0.01 for x in range(100, 20, -10)]:
         pixels.fill((int(255 * brightness), 0, 0))
         pixels.show()
         time.sleep(0.01 / SPEED)
+        if check_exit():
+            return
 
 
 def boom(pixels):

@@ -18,7 +18,7 @@ check_exit = False
 notice_flag = False
 
 
-def notice():
+def check_notice():
     global notice_flag
     if notice_flag:
         notice_flag = False
@@ -37,12 +37,12 @@ def ring_control():
             break
         count += 1
         if state == question_lib.State.INIT:
-            ring.load(pixels)
+            ring.load(pixels, check_notice)
         if state == question_lib.State.WAIT:
-            ring.breath(pixels, notice(), "yellow")
+            ring.breath(pixels, check_notice, "yellow")
         elif state == question_lib.State.YES:
             if acc["yes_acc"] >= 3:
-                ring.rainbow(pixels, count)
+                ring.rainbow(pixels, count, check_notice)
             else:
                 ring.color(pixels, "green")
         elif state == question_lib.State.NO:
