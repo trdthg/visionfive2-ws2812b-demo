@@ -95,12 +95,12 @@ if __name__ == "__main__":
         target=question_lib.main_loop, kwargs={"cb": cb, "check_exit": check_notice}
     )
 
-    def signal_handler():
+    def signal_handler(signum, frame):
         global t1
         global check_exit
         check_exit = True
-        t1.join()
-        t2.join()
+        t1.join(timeout=3)
+        t2.join(timeout=3)
         exit(0)
 
     signal.signal(signal.SIGINT, signal_handler)
