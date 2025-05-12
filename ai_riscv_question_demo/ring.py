@@ -26,14 +26,14 @@ def clear(pixels):
     pixels.fill((0, 0, 0))  # 清空所有 LED
 
 
-def color(pixels, color):
-    pixels.fill(colors[color])
-    for i in range(0, 255, 2):
-        print(" %d" % i, end="", flush=True)
-        pixels.fill((i, 0, 0))
+def color(pixels, check_exit, color):
+    for i in range(LED_COUNT):
+        pixels.fill((colors[color], 0, 0))
+        if check_exit():
+            return
 
 
-def rainbow(pixels, cycle, check_exit):
+def rainbow(pixels, check_exit, cycle):
     # print("=== 彩虹波浪效果 ===")
     for i in range(LED_COUNT):
         # 计算每个 LED 的颜色偏移

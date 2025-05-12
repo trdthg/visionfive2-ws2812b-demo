@@ -46,14 +46,13 @@ def ring_control():
             ring.breath(pixels, check_notice, "yellow")
         elif state == question_lib.State.YES:
             if acc["yes_acc"] >= 3:
-                ring.rainbow(pixels, count, check_notice)
+                ring.rainbow(pixels, check_notice, count)
             else:
-                ring.color(pixels, "green")
+                ring.breath(pixels, check_notice, "green")
         elif state == question_lib.State.NO:
-            ring.color(pixels, "red")
+            ring.color(pixels, check_notice, "red")
         elif state == question_lib.State.END:
-            ring.color(pixels, "white")
-            pass
+            ring.color(pixels, check_notice, "white")
         notice_flag = False
 
 
@@ -87,7 +86,7 @@ def cb(new_question_info, new_state, new_acc):
         time.sleep(1)
     elif state == question_lib.State.END:
         print("答案分析：" + question_info["more"])
-        time.sleep(1)
+        input("按回车继续")
 
 
 if __name__ == "__main__":
