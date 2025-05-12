@@ -85,10 +85,10 @@ def cb(new_question_info, new_state, new_acc):
             acc["yes_acc"] = 0
     elif state == question_lib.State.NO:
         print("结果：错误")
-        input("按回车继续")
+        input("按回车查看答案解析")
     elif state == question_lib.State.END:
         print("答案分析：" + question_info["more"])
-        input("按回车查看答案解析")
+        input("按回车继续")
 
 
 if __name__ == "__main__":
