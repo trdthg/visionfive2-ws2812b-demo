@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISC-V 知识问答</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="question-card">
+            <div class="card-header">
+                <h2>RISC-V 知识问答</h2>
+                <div class="score-board">
+                    <div class="score-item">连续正确: <span id="yes-acc">0</span></div>
+                    <div class="score-item">总正确: <span id="yes-count">0</span></div>
+                    <div class="score-item">总错误: <span id="no-count">0</span></div>
+                </div>
+            </div>
+
+            <div class="card-content">
+                <!-- 初始状态 -->
+                <div id="init-state" class="state-content">
+                    <button class="btn primary" onclick="startQuestion()">开始答题</button>
+                </div>
+
+                <!-- 问题状态 -->
+                <div id="wait-state" class="state-content hidden">
+                    <h3 id="question-text"></h3>
+                    <div id="options-container" class="options-list"></div>
+                    <button class="btn primary" onclick="submitAnswer()" id="submit-btn" disabled>提交答案</button>
+                </div>
+
+                <!-- 答案反馈 -->
+                <div id="feedback-state" class="state-content hidden">
+                    <div class="result-icon">
+                        <span id="result-icon"></span>
+                    </div>
+                    <h3 id="result-text"></h3>
+                    <div class="explanation">
+                        <h4>解释：</h4>
+                        <p id="explanation-text"></p>
+                    </div>
+                    <button class="btn primary" onclick="nextQuestion()">下一题</button>
+                </div>
+
+                <!-- 结束状态 -->
+                <div id="end-state" class="state-content hidden">
+                    <h3>本轮答题结束</h3>
+                    <button class="btn primary" onclick="startQuestion()">重新开始</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
