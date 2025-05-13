@@ -29,6 +29,7 @@ function updateScore(score) {
 }
 
 // 创建选项元素
+// 创建选项元素
 function createOption(text) {
     const option = document.createElement('div');
     option.className = 'option-item';
@@ -38,7 +39,8 @@ function createOption(text) {
             opt.classList.remove('selected');
         });
         option.classList.add('selected');
-        selectedAnswer = text;
+        // 只取选项的第一个字母（A、B、C、D）
+        selectedAnswer = text.split(':')[0].trim();
         document.getElementById('submit-btn').disabled = false;
     };
     return option;
@@ -97,7 +99,7 @@ async function submitAnswer() {
             document.getElementById('explanation-text').textContent = explanation;
             
             updateScore(score);
-            showState(correct ? 'yes' : 'no');
+            showState(correct ? 'yes' : 'no');  // 这里的状态显示是正确的
         } else {
             alert('提交答案失败：' + data.message);
         }
