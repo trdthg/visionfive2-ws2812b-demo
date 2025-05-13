@@ -9,11 +9,6 @@ from lib.pixelbuf import wheel
 app = Flask(__name__, static_folder='frontend', static_url_path='')
 CORS(app)
 
-# 添加根路由，返回前端页面
-@app.route('/')
-def serve_frontend():
-    return send_from_directory(app.static_folder, 'index.html')
-
 # 全局状态
 pixels = np.NeoPixelSpiDev(1, 0, n=24, pixel_order=np.GRB)
 state = question_lib.State.INIT
