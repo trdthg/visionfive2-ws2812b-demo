@@ -19,6 +19,12 @@
             </div>
 
             <div class="card-content">
+                <!-- 加载动画 -->
+                <div id="loading-spinner" class="loading-spinner hidden">
+                    <div class="spinner"></div>
+                    <p>正在获取题目...</p>
+                </div>
+                
                 <!-- 初始状态 -->
                 <div id="init-state" class="state-content">
                     <button class="btn primary" onclick="startQuestion()">开始答题</button>

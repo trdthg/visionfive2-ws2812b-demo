@@ -49,6 +49,10 @@ function createOption(text) {
 // 开始新问题
 async function startQuestion() {
     try {
+        // 显示加载动画
+        document.getElementById('loading-spinner').classList.remove('hidden');
+        document.getElementById('init-state').classList.add('hidden');
+        
         const response = await fetch(`${API_BASE}/question/start`, {
             method: 'POST'
         });
@@ -66,11 +70,20 @@ async function startQuestion() {
             
             selectedAnswer = null;
             document.getElementById('submit-btn').disabled = true;
+            
+            // 隐藏加载动画并显示问题
+            document.getElementById('loading-spinner').classList.add('hidden');
             showState('wait');
         } else {
+            // 出错时也要隐藏加载动画
+            document.getElementById('loading-spinner').classList.add('hidden');
+            showState('init');
             alert('获取问题失败：' + data.message);
         }
     } catch (error) {
+        // 出错时也要隐藏加载动画
+        document.getElementById('loading-spinner').classList.add('hidden');
+        showState('init');
         alert('网络错误，请重试');
     }
 }
