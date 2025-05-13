@@ -6,8 +6,8 @@ const states = ['init', 'wait', 'yes', 'no', 'end'];
 const stateContents = {
     'init': document.getElementById('init-state'),
     'wait': document.getElementById('wait-state'),
-    'yes': document.getElementById('feedback-state'),
-    'no': document.getElementById('feedback-state'),
+    'yes': document.getElementById('yes-state'),
+    'no': document.getElementById('no-state'),
     'end': document.getElementById('end-state')
 };
 
@@ -105,14 +105,12 @@ async function submitAnswer() {
         if (data.status === 'success') {
             const { correct, explanation, score } = data.data;
             
-            // 更新反馈界面
-            document.getElementById('result-icon').textContent = correct ? '✅' : '❌';
-            document.getElementById('result-icon').className = correct ? 'success-icon' : 'error-icon';
-            document.getElementById('result-text').textContent = correct ? '回答正确！' : '回答错误！';
-            document.getElementById('explanation-text').textContent = explanation;
+            // 更新解释文本
+            const explanationElement = document.getElementById(correct ? 'yes-explanation' : 'no-explanation');
+            explanationElement.textContent = explanation;
             
             updateScore(score);
-            showState(correct ? 'yes' : 'no');  // 这里的状态显示是正确的
+            showState(correct ? 'yes' : 'no');
         } else {
             alert('提交答案失败：' + data.message);
         }
@@ -147,12 +145,14 @@ async function getStatus() {
         const data = await response.json();
         
         if (data.status === 'success') {
-            const { state, score } = data.data;
-            showState(state.toLowerCase());
-            updateScore(score);
+            // 忽略后端状态，总是显示初始状态
+            showState('init');
+            updateScore(data.data.score);
         }
     } catch (error) {
         console.error('获取状态失败');
+        // 出错时也显示初始状态
+        showState('init');
     }
 }
 
