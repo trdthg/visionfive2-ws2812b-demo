@@ -49,9 +49,20 @@ function createOption(text) {
 // 开始新问题
 async function startQuestion() {
     try {
-        // 显示加载动画
-        document.getElementById('loading-spinner').classList.remove('hidden');
-        document.getElementById('init-state').classList.add('hidden');
+        // 如果是从 end 状态开始，不显示加载动画
+        const endState = document.getElementById('end-state');
+        const initState = document.getElementById('init-state');
+        
+        if (!endState.classList.contains('hidden')) {
+            // 从结束状态开始，直接切换状态
+            showState('wait');
+        } else if (!initState.classList.contains('hidden')) {
+            // 从初始状态开始，直接切换状态
+            showState('wait');
+        } else {
+            // 从其他状态（比如点击下一题）开始，显示加载动画
+            document.getElementById('loading-spinner').classList.remove('hidden');
+        }
         
         const response = await fetch(`${API_BASE}/question/start`, {
             method: 'POST'
@@ -88,52 +99,30 @@ async function startQuestion() {
     }
 }
 
-// 提交答案
-async function submitAnswer() {
-    if (!selectedAnswer) return;
-    
-    try {
-        const response = await fetch(`${API_BASE}/question/answer`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ answer: selectedAnswer })
-        });
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            const { correct, explanation, score } = data.data;
-            
-            // 更新解释文本
-            const explanationElement = document.getElementById(correct ? 'yes-explanation' : 'no-explanation');
-            explanationElement.textContent = explanation;
-            
-            updateScore(score);
-            showState(correct ? 'yes' : 'no');
-        } else {
-            alert('提交答案失败：' + data.message);
-        }
-    } catch (error) {
-        alert('网络错误，请重试');
-    }
-}
-
+// 下一题
 // 下一题
 async function nextQuestion() {
     try {
+        // 显示加载动画
+        document.getElementById('loading-spinner').classList.remove('hidden');
+        showState('end');
+        
         const response = await fetch(`${API_BASE}/question/next`, {
             method: 'POST'
         });
         const data = await response.json();
         
+        // 请求完成后立即隐藏加载动画
+        document.getElementById('loading-spinner').classList.add('hidden');
+        
         if (data.status === 'success') {
-            showState('end');
             setTimeout(startQuestion, 1000);
         } else {
             alert('操作失败：' + data.message);
         }
     } catch (error) {
+        // 出错时也要隐藏加载动画
+        document.getElementById('loading-spinner').classList.add('hidden');
         alert('网络错误，请重试');
     }
 }
