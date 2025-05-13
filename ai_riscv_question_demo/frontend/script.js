@@ -140,18 +140,47 @@ async function submitAnswer() {
 // 下一题
 async function nextQuestion() {
     try {
+        // 显示加载动画，隐藏当前内容
         document.getElementById('loading-spinner').classList.remove('hidden');
-        showState('end');
+        document.getElementById('question-text').textContent = '';
+        document.getElementById('options-container').innerHTML = '';
         
-        // 通知后端切换到结束状态
-        await fetch(`${API_BASE}/light/end`, { method: 'POST' });
+        const response = await fetch(`${API_BASE}/question/next`, {
+            method: 'POST'
+        });
+        const data = await response.json();
         
-        document.getElementById('loading-spinner').classList.add('hidden');
-        setTimeout(startQuestion, 1000);
+        if (data.status === 'success') {
+            startQuestion();
+        } else {
+            document.getElementById('loading-spinner').classList.add('hidden');
+            alert('操作失败：' + data.message);
+        }
     } catch (error) {
         document.getElementById('loading-spinner').classList.add('hidden');
         alert('网络错误，请重试');
     }
+}
+
+// 更新分数显示
+function updateScore(score) {
+    document.getElementById('yes-acc').textContent = score.yes_acc;
+    document.getElementById('yes-count').textContent = score.yes_count;
+    document.getElementById('no-count').textContent = score.no_count;
+    
+    // 检查是否达到彩虹灯效条件
+    if (score.yes_count >= 3) {
+        fetch(`${API_BASE}/light/rainbow`, { method: 'POST' });
+    }
+}
+
+// 添加重新开始功能
+function restart() {
+    score.yes_count = 0;
+    score.no_count = 0;
+    score.yes_acc = 0;
+    updateScore(score);
+    startQuestion();
 }
 
 // 获取初始状态
