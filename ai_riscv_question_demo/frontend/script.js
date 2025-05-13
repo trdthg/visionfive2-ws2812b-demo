@@ -1,5 +1,6 @@
 const API_BASE = '/api';
 let selectedAnswer = null;
+let currentQuestion = null;
 
 // 状态管理
 const states = ['init', 'wait', 'yes', 'no', 'end'];
@@ -9,6 +10,14 @@ const stateContents = {
     'yes': document.getElementById('yes-state'),
     'no': document.getElementById('no-state'),
     'end': document.getElementById('end-state')
+};
+
+// 分数统计
+const score = {
+    yes_count: 0,
+    yes_acc: 0,
+    no_count: 0,
+    no_acc: 0
 };
 
 // 显示指定状态的内容
@@ -54,13 +63,10 @@ async function startQuestion() {
         const initState = document.getElementById('init-state');
         
         if (!endState.classList.contains('hidden')) {
-            // 从结束状态开始，直接切换状态
             showState('wait');
         } else if (!initState.classList.contains('hidden')) {
-            // 从初始状态开始，直接切换状态
             showState('wait');
         } else {
-            // 从其他状态（比如点击下一题）开始，显示加载动画
             document.getElementById('loading-spinner').classList.remove('hidden');
         }
         
@@ -70,9 +76,10 @@ async function startQuestion() {
         const data = await response.json();
         
         if (data.status === 'success') {
-            const { question, options } = data.data;
-            document.getElementById('question-text').textContent = question;
+            const { question, options, answer, more } = data.data;
+            currentQuestion = { question, options, answer, more };
             
+            document.getElementById('question-text').textContent = question;
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
             options.forEach(option => {
@@ -82,67 +89,77 @@ async function startQuestion() {
             selectedAnswer = null;
             document.getElementById('submit-btn').disabled = true;
             
-            // 隐藏加载动画并显示问题
             document.getElementById('loading-spinner').classList.add('hidden');
             showState('wait');
+            
+            // 通知后端切换到等待状态
+            await fetch(`${API_BASE}/light/wait`, { method: 'POST' });
         } else {
-            // 出错时也要隐藏加载动画
             document.getElementById('loading-spinner').classList.add('hidden');
             showState('init');
             alert('获取问题失败：' + data.message);
         }
     } catch (error) {
-        // 出错时也要隐藏加载动画
         document.getElementById('loading-spinner').classList.add('hidden');
         showState('init');
         alert('网络错误，请重试');
     }
 }
 
-// 下一题
+// 提交答案
+async function submitAnswer() {
+    if (!selectedAnswer || !currentQuestion) return;
+    
+    const isCorrect = selectedAnswer === currentQuestion.answer;
+    
+    if (isCorrect) {
+        score.yes_count++;
+        score.yes_acc++;
+        score.no_acc = 0;
+        showState('yes');
+        document.getElementById('yes-explanation-text').textContent = currentQuestion.more;
+        // 通知后端显示正确灯效
+        await fetch(`${API_BASE}/light/correct`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ combo: score.yes_acc })
+        });
+    } else {
+        score.no_count++;
+        score.no_acc++;
+        score.yes_acc = 0;
+        showState('no');
+        document.getElementById('no-explanation-text').textContent = currentQuestion.more;
+        // 通知后端显示错误灯效
+        await fetch(`${API_BASE}/light/wrong`, { method: 'POST' });
+    }
+    
+    updateScore(score);
+}
+
 // 下一题
 async function nextQuestion() {
     try {
-        // 显示加载动画
         document.getElementById('loading-spinner').classList.remove('hidden');
         showState('end');
         
-        const response = await fetch(`${API_BASE}/question/next`, {
-            method: 'POST'
-        });
-        const data = await response.json();
+        // 通知后端切换到结束状态
+        await fetch(`${API_BASE}/light/end`, { method: 'POST' });
         
-        // 请求完成后立即隐藏加载动画
         document.getElementById('loading-spinner').classList.add('hidden');
-        
-        if (data.status === 'success') {
-            setTimeout(startQuestion, 1000);
-        } else {
-            alert('操作失败：' + data.message);
-        }
+        setTimeout(startQuestion, 1000);
     } catch (error) {
-        // 出错时也要隐藏加载动画
         document.getElementById('loading-spinner').classList.add('hidden');
         alert('网络错误，请重试');
     }
 }
 
 // 获取初始状态
-async function getStatus() {
-    try {
-        const response = await fetch(`${API_BASE}/status`);
-        const data = await response.json();
-        
-        if (data.status === 'success') {
-            // 忽略后端状态，总是显示初始状态
-            showState('init');
-            updateScore(data.data.score);
-        }
-    } catch (error) {
-        console.error('获取状态失败');
-        // 出错时也显示初始状态
-        showState('init');
-    }
+function getStatus() {
+    showState('init');
+    updateScore(score);
+    // 通知后端切换到初始状态
+    fetch(`${API_BASE}/light/init`, { method: 'POST' }).catch(console.error);
 }
 
 // 页面加载完成后初始化
